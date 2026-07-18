@@ -1,49 +1,38 @@
-# NEON BLOCKS
+# NEON BLOCKS — Overdrive v3
 
-모바일과 PC에서 바로 실행되는 네온 낙하 블록 퍼즐 게임이다.
+모바일 발열과 조작감을 개선한 네온 낙하 블록 퍼즐 게임이다.
 
-## 게임 기능
+## v3 핵심 변경
 
-- 모바일 보드 직접 스와이프 조작
-- 탭 회전, 아래 플릭 하드 드롭, 위 스와이프 홀드
-- 10×20 보드와 7-bag 블록 생성
-- 벽차기 회전, 고스트, 홀드, 다음 블록 표시
-- 점수, 최고점수, 라인, 레벨
-- 콤보, Back-to-Back, Perfect Clear
-- 줄 삭제 플래시, 파티클, 화면 흔들림, 진동 피드백
-- 일시정지와 재시작
-- 외부 라이브러리·이미지·폰트 없음
+- 평상시 30FPS, 효과 순간만 60FPS
+- 네온 블록과 게임판 배경을 최초 1회 캐시 후 재사용
+- `backdrop-filter` 제거 및 파티클 최대 개수 제한
+- 게임판과 분리된 하단 터치패드
+- 줄 삭제 히트스톱, 화면 충격, 파티클, 단계별 콤보 사운드
+- 점수 체계 확대: 1줄 1,000 / 2줄 3,000 / 3줄 6,000 / 4줄 12,000
+- 콤보 배수 및 백투백 보너스
+- NEON OVERDRIVE: 8초간 점수 2배, 낙하 속도 완화, 콤보 보호 2회
 
-## 로컬 실행
+## 모바일 조작
 
-`index.html`을 브라우저로 열거나 아래 명령을 실행한다.
+- 터치패드 좌우 드래그: 이동
+- 터치패드 탭: 회전
+- 터치패드 아래 드래그: 소프트 드롭
+- 터치패드 아래 플릭: 하드 드롭
+- 터치패드 위 스와이프: 홀드
+- 하단 버튼: HOLD / ROTATE / DRIVE / DROP
 
-```bash
-python3 -m http.server 8000
-```
+## GitHub 업데이트
 
-브라우저에서 `http://localhost:8000`으로 접속한다.
-
-## GitHub 자동 배포
-
-GitHub CLI 로그인이 된 컴퓨터에서 다음을 실행한다.
+압축을 Downloads에 풀고 다음 두 줄만 실행한다.
 
 ```bash
-chmod +x push_to_github.sh
-./push_to_github.sh
+cd ~/Downloads/neon-blocks-for-you-git-update-https-v3
+bash push_neon_blocks_v3.sh
 ```
 
-생성 대상:
+게임 주소:
 
-- 저장소: `gt10300407/neon-blocks-for-you`
-- 공개 주소: `https://gt10300407.github.io/neon-blocks-for-you/`
-
-## PC 키보드
-
-- `←` `→`: 이동
-- `↓`: 소프트 드롭
-- `Z` / `X` 또는 `↑`: 회전
-- `Space`: 하드 드롭
-- `C`: 홀드
-- `P`: 일시정지
-- `R`: 재시작
+```text
+https://gt10300407.github.io/neon-blocks-for-you/
+```

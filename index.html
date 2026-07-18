@@ -850,7 +850,7 @@
     if (!collides(current.x+dx,current.y+dy,current.rotation)) {
       current.x += dx;
       current.y += dy;
-      if (soft && dy>0) { score += 10*dy; updateStats(); }
+      if (soft && dy>0) { score += dy; updateStats(); }
       if (grounded()) {
         if (lockStart !== null && lockResets<MAX_LOCK_RESETS && dx!==0) {
           lockStart = performance.now();
@@ -889,7 +889,7 @@
     let distance=0;
     const startY=current.y;
     while (!collides(current.x,current.y+1,current.rotation)) { current.y++; distance++; }
-    score += distance*20;
+    score += distance*2;
     overdriveCharge = Math.min(100, overdriveCharge + Math.min(8,distance*.35));
     createDropTrail(startY,current.y);
     tone(135,.055,"square",.026);

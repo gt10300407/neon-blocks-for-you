@@ -1,38 +1,45 @@
-# NEON BLOCKS — Overdrive v3
+# NEON BLOCKS — Neon Mix v3.3
 
-모바일 발열과 조작감을 개선한 네온 낙하 블록 퍼즐 게임이다.
+일반 테트리스 7종에 네온 특수 도형 5종을 추가하고, 반복적으로 느껴지던 7-bag 순서를 교체한 버전이다.
 
-## v3 핵심 변경
+## v3.3 변경
 
-- 평상시 30FPS, 효과 순간만 60FPS
-- 네온 블록과 게임판 배경을 최초 1회 캐시 후 재사용
-- `backdrop-filter` 제거 및 파티클 최대 개수 제한
-- 게임판과 분리된 하단 터치패드
-- 줄 삭제 히트스톱, 화면 충격, 파티클, 단계별 콤보 사운드
-- 점수 체계 확대: 1줄 1,000 / 2줄 3,000 / 3줄 6,000 / 4줄 12,000
-- 콤보 배수 및 백투백 보너스
-- NEON OVERDRIVE: 8초간 점수 2배, 낙하 속도 완화, 콤보 보호 2회
+- 클래식 도형 7종 유지: I, J, L, O, S, T, Z
+- 네온 특수 도형 5종 추가
+  - 3칸 막대
+  - 3칸 미니 L
+  - U 도형
+  - V 도형
+  - X 도형
+- 기존 7-bag 제거
+- 최근 4개 도형과 겹치지 않도록 우선 선택하는 History Randomizer 적용
+- 특정 클래식 도형이 지나치게 오래 나오지 않는 Drought Protection 적용
+- 특수 도형은 첫 7개 이후 약 18% 확률로 등장
+- 특수 도형 연속 출현 방지용 4개 쿨다운 적용
+- 시작 화면에 `NEON MIX · 12 SHAPES` 표시
+- v3.2 한국어 줄바꿈·텍스트 선택 방지 수정 유지
 
-## 모바일 조작
+## 랜덤 방식
 
-- 터치패드 좌우 드래그: 이동
-- 터치패드 탭: 회전
-- 터치패드 아래 드래그: 소프트 드롭
-- 터치패드 아래 플릭: 하드 드롭
-- 터치패드 위 스와이프: 홀드
-- 하단 버튼: HOLD / ROTATE / DRIVE / DROP
+완전 무작위는 같은 도형이 계속 나오거나 필요한 도형이 오랫동안 안 나올 수 있다.
+따라서 v3.3은 고정된 7개 묶음이 아니라 다음 기준을 함께 사용한다.
+
+1. 최근 4개 도형은 우선 제외
+2. 오래 나오지 않은 클래식 도형의 확률 증가
+3. 12개 이상 나오지 않은 클래식 도형은 강제 보정
+4. 특수 도형은 연속으로 나오지 않음
 
 ## GitHub 업데이트
 
 압축을 Downloads에 풀고 다음 두 줄만 실행한다.
 
 ```bash
-cd ~/Downloads/neon-blocks-for-you-git-update-https-v3
-bash push_neon_blocks_v3.sh
+cd ~/Downloads/neon-blocks-for-you-git-update-https-v3-3
+bash push_neon_blocks_v3_3.sh
 ```
 
-게임 주소:
+캐시를 피한 확인 주소:
 
 ```text
-https://gt10300407.github.io/neon-blocks-for-you/
+https://gt10300407.github.io/neon-blocks-for-you/?v=3.3
 ```

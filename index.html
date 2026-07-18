@@ -22,8 +22,20 @@
       --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { width: 100%; min-height: 100%; margin: 0; background: var(--bg); }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+    }
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
     body {
       min-height: 100dvh;
       overflow: hidden;
@@ -35,7 +47,13 @@
         radial-gradient(circle at 88% 90%, rgba(212, 42, 174, .12), transparent 32%),
         #04040c;
     }
-    button { font: inherit; }
+    button {
+      font: inherit;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: manipulation;
+    }
 
     .app {
       width: min(100%, 980px);
@@ -46,6 +64,9 @@
       grid-template-rows: auto auto minmax(0, 1fr) auto auto;
       gap: 6px;
       overflow: hidden;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
     }
 
     .topbar {
@@ -183,20 +204,84 @@
     }
     .overlay[hidden] { display:none; }
     .overlay-card {
-      width:min(90%,330px); padding:19px 15px; text-align:center;
+      width:min(92%,360px); padding:20px 17px; text-align:center;
       border:1px solid rgba(105,245,255,.34); border-radius:18px;
       background:#0b0d26; box-shadow:0 0 28px rgba(84,246,255,.12);
     }
-    .overlay-card h2 { margin:0 0 7px; font-size:clamp(24px,8vw,38px); text-shadow:0 0 12px var(--cyan); }
-    .overlay-card p { margin:0 0 12px; color:#aab2d1; font-size:11px; line-height:1.55; }
-    .guide { display:grid; grid-template-columns:1fr 1fr; gap:5px; margin:10px 0 14px; text-align:left; }
-    .guide div { padding:6px 7px; border:1px solid rgba(255,255,255,.055); border-radius:8px; color:#c8ceea; background:rgba(255,255,255,.02); font-size:9px; }
-    .guide b { color:white; }
+    .overlay-card h2 {
+      margin:0 0 10px;
+      font-size:clamp(25px,7vw,34px);
+      line-height:1.08;
+      letter-spacing:.025em;
+      white-space:nowrap;
+      text-shadow:0 0 12px var(--cyan);
+    }
+    .overlay-card p {
+      max-width:26em;
+      margin:0 auto 14px;
+      color:#aab2d1;
+      font-size:12px;
+      line-height:1.55;
+      word-break:keep-all;
+      overflow-wrap:normal;
+      text-wrap:balance;
+    }
+    .mix-badge {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin: 2px auto 11px;
+      padding: 6px 12px;
+      border: 1px solid rgba(84,246,255,.28);
+      border-radius: 999px;
+      color: #8df8ff;
+      background: rgba(84,246,255,.06);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      white-space: nowrap;
+    }
+
+    .guide {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:7px;
+      margin:12px 0 16px;
+      text-align:left;
+    }
+    .guide div {
+      min-width:0;
+      min-height:62px;
+      padding:9px 10px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:flex-start;
+      gap:3px;
+      border:1px solid rgba(255,255,255,.065);
+      border-radius:10px;
+      color:#c8ceea;
+      background:rgba(255,255,255,.025);
+      font-size:10px;
+      line-height:1.35;
+      word-break:keep-all;
+      overflow-wrap:normal;
+    }
+    .guide b {
+      display:block;
+      color:white;
+      font-size:11px;
+      line-height:1.3;
+      white-space:nowrap;
+    }
+    .guide span { display:block; white-space:nowrap; }
     .primary {
-      min-width:148px; min-height:45px;
+      min-width:160px; min-height:48px;
+      padding:0 20px;
       border:1px solid rgba(93,245,255,.66); border-radius:13px;
       color:white; background:linear-gradient(135deg,rgba(20,207,255,.28),rgba(255,64,214,.24));
-      font-weight:950; letter-spacing:.08em;
+      font-weight:950; letter-spacing:.05em;
+      white-space:nowrap;
     }
 
     .control-zone { display:none; min-height:0; }
@@ -210,7 +295,9 @@
         linear-gradient(90deg, transparent 49.5%, rgba(255,255,255,.055) 49.5%, rgba(255,255,255,.055) 50.5%, transparent 50.5%),
         linear-gradient(180deg, rgba(25,30,67,.78), rgba(9,11,29,.94));
       touch-action:none;
+      -webkit-user-select:none;
       user-select:none;
+      -webkit-touch-callout:none;
     }
     .touchpad::before {
       content:""; position:absolute; left:12%; right:12%; top:50%; height:1px;
@@ -250,6 +337,23 @@
 
     .desktop-help { color:#7780a5; text-align:center; font-size:10px; }
 
+    html[lang="ko"] .overlay-card,
+    html[lang="ko"] .guide,
+    html[lang="ko"] .action-btn,
+    html[lang="ko"] .primary { word-break:keep-all; overflow-wrap:normal; }
+
+
+    .app, .app * {
+      -webkit-user-drag: none;
+    }
+
+    .brand, .hud, .panel, .overlay, .guide, .control-zone, .mobile-actions,
+    .touchpad, .action-btn, .primary, .icon-btn {
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+
     @media (max-width:680px) {
       .app { grid-template-rows:auto auto minmax(0,1fr) auto auto; gap:5px; padding-left:6px; padding-right:6px; }
       .subtitle { display:none; }
@@ -263,7 +367,22 @@
       .control-zone { display:block; }
       .mobile-actions { display:grid; }
       .desktop-help { display:none; }
-      .overlay-card { width:94%; padding:16px 12px; }
+      .overlay {
+        position:fixed;
+        z-index:1000;
+        inset:0;
+        padding:max(18px,var(--safe-top)) 14px max(18px,var(--safe-bottom));
+        border-radius:0;
+        background:rgba(3,4,15,.90);
+      }
+      .overlay-card {
+        width:min(100%,390px);
+        padding:24px 18px 20px;
+      }
+      .overlay-card h2 { font-size:clamp(27px,8vw,34px); }
+      .overlay-card p { font-size:13px; }
+      .guide div { min-height:66px; padding:10px 11px; font-size:11px; }
+      .guide b { font-size:12px; }
     }
 
     @media (max-width:375px) {
@@ -332,12 +451,13 @@
           <div id="overlay" class="overlay">
             <div class="overlay-card">
               <h2 id="overlayTitle">NEON BLOCKS</h2>
-              <p id="overlayText">게임판은 눈으로 보고, 아래 터치패드에서 편하게 움직여.</p>
+              <p id="overlayText">클래식 7종과 네온 특수 도형 5종.<br>순서는 매번 다르게 섞여.</p>
+              <div class="mix-badge">NEON MIX · 12 SHAPES</div>
               <div id="guide" class="guide">
-                <div><b>터치패드 좌우</b><br>블록 이동</div>
-                <div><b>터치패드 탭</b><br>블록 회전</div>
-                <div><b>아래 플릭</b><br>즉시 낙하</div>
-                <div><b>위 스와이프</b><br>블록 홀드</div>
+                <div><b>좌우 드래그</b><span>블록 이동</span></div>
+                <div><b>가볍게 탭</b><span>블록 회전</span></div>
+                <div><b>아래로 플릭</b><span>즉시 낙하</span></div>
+                <div><b>위로 스와이프</b><span>블록 홀드</span></div>
               </div>
               <button id="startBtn" class="primary">게임 시작</button>
             </div>
@@ -400,10 +520,47 @@
   const HIT_STOP = [0, 45, 65, 85, 115];
   const COMBO_MULTIPLIER = [1, 1, 1.3, 1.6, 2, 2.5, 3];
 
+  const CLASSIC_TYPES = Object.freeze(["I","J","L","O","S","T","Z"]);
+  const SPECIAL_TYPES = Object.freeze(["A","B","U","V","X"]);
+  const ALL_TYPES = Object.freeze([...CLASSIC_TYPES, ...SPECIAL_TYPES]);
+  const HISTORY_SIZE = 4;
+  const MAX_DROUGHT = 12;
+  const SPECIAL_CHANCE = 0.18;
+  const SPECIAL_COOLDOWN_PIECES = 4;
+
   const COLORS = {
     I: "#42f5ff", J: "#5485ff", L: "#ff9b42", O: "#ffe14a",
-    S: "#52ff82", T: "#c461ff", Z: "#ff4f7b"
+    S: "#52ff82", T: "#c461ff", Z: "#ff4f7b",
+    A: "#00ffd0", B: "#8dff54", U: "#ff5cf4", V: "#ff6b35", X: "#f3ff52"
   };
+
+  function rotateMatrixCW(matrix) {
+    const rows = matrix.length;
+    const cols = matrix[0].length;
+    return Array.from({ length: cols }, (_, r) =>
+      Array.from({ length: rows }, (_, c) => matrix[rows - 1 - c][r])
+    );
+  }
+
+  function trimMatrix(matrix) {
+    let top = 0, bottom = matrix.length - 1;
+    let left = 0, right = matrix[0].length - 1;
+    while (top <= bottom && matrix[top].every(v => !v)) top++;
+    while (bottom >= top && matrix[bottom].every(v => !v)) bottom--;
+    while (left <= right && matrix.every(row => !row[left])) left++;
+    while (right >= left && matrix.every(row => !row[right])) right--;
+    return matrix.slice(top, bottom + 1).map(row => row.slice(left, right + 1));
+  }
+
+  function makeRotations(base) {
+    const rotations = [];
+    let matrix = trimMatrix(base);
+    for (let i = 0; i < 4; i++) {
+      rotations.push(matrix.map(row => [...row]));
+      matrix = trimMatrix(rotateMatrixCW(matrix));
+    }
+    return rotations;
+  }
 
   const SHAPES = {
     I: [
@@ -432,7 +589,14 @@
     Z: [
       [[1,1,0],[0,1,1],[0,0,0]], [[0,0,1],[0,1,1],[0,1,0]],
       [[0,0,0],[1,1,0],[0,1,1]], [[0,1,0],[1,1,0],[1,0,0]]
-    ]
+    ],
+
+    // NEON MIX 특수 도형 5종: 일반 7종 사이에 낮은 확률로 등장한다.
+    A: makeRotations([[1,1,1]]),
+    B: makeRotations([[1,0],[1,1]]),
+    U: makeRotations([[1,0,1],[1,1,1]]),
+    V: makeRotations([[1,0,0],[1,0,0],[1,1,1]]),
+    X: makeRotations([[0,1,0],[1,1,1],[0,1,0]])
   };
 
   const JLSTZ_KICKS = {
@@ -481,8 +645,11 @@
   };
 
   let board = createBoard();
-  let bag = [];
   let queue = [];
+  let recentTypes = [];
+  let drought = Object.fromEntries(CLASSIC_TYPES.map(type => [type, 0]));
+  let piecesGenerated = 0;
+  let specialCooldown = 0;
   let current = null;
   let holdType = null;
   let canHold = true;
@@ -583,17 +750,71 @@
     target.closePath();
   }
 
-  function shuffle(values) {
-    const out = [...values];
-    for (let i=out.length-1;i>0;i--) {
-      const j = Math.floor(Math.random()*(i+1));
-      [out[i],out[j]] = [out[j],out[i]];
-    }
-    return out;
+  function randomChoice(values) {
+    return values[Math.floor(Math.random() * values.length)];
   }
-  function refillBag() { if (!bag.length) bag = shuffle(["I","J","L","O","S","T","Z"]); }
-  function takeFromBag() { refillBag(); return bag.pop(); }
-  function fillQueue() { while (queue.length < 5) queue.push(takeFromBag()); }
+
+  function weightedChoice(values, weightOf) {
+    const weights = values.map(value => Math.max(0.01, weightOf(value)));
+    const total = weights.reduce((sum, value) => sum + value, 0);
+    let cursor = Math.random() * total;
+    for (let i = 0; i < values.length; i++) {
+      cursor -= weights[i];
+      if (cursor <= 0) return values[i];
+    }
+    return values[values.length - 1];
+  }
+
+  function resetRandomizer() {
+    queue = [];
+    recentTypes = [];
+    drought = Object.fromEntries(CLASSIC_TYPES.map(type => [type, 0]));
+    piecesGenerated = 0;
+    specialCooldown = 0;
+  }
+
+  function takeClassicType() {
+    const mostStarved = CLASSIC_TYPES.reduce((best, type) =>
+      drought[type] > drought[best] ? type : best, CLASSIC_TYPES[0]);
+
+    let chosen;
+    if (drought[mostStarved] >= MAX_DROUGHT) {
+      chosen = mostStarved;
+    } else {
+      let candidates = CLASSIC_TYPES.filter(type => !recentTypes.includes(type));
+      if (!candidates.length) candidates = [...CLASSIC_TYPES];
+      chosen = weightedChoice(candidates, type => 1 + drought[type] * 0.32);
+    }
+
+    for (const type of CLASSIC_TYPES) {
+      drought[type] = type === chosen ? 0 : drought[type] + 1;
+    }
+    return chosen;
+  }
+
+  function takeSpecialType() {
+    let candidates = SPECIAL_TYPES.filter(type => !recentTypes.slice(-3).includes(type));
+    if (!candidates.length) candidates = [...SPECIAL_TYPES];
+    return randomChoice(candidates);
+  }
+
+  function takeRandomType() {
+    const specialAllowed = piecesGenerated >= 7 && specialCooldown <= 0;
+    const useSpecial = specialAllowed && Math.random() < SPECIAL_CHANCE;
+    const chosen = useSpecial ? takeSpecialType() : takeClassicType();
+
+    if (useSpecial) specialCooldown = SPECIAL_COOLDOWN_PIECES;
+    else specialCooldown = Math.max(0, specialCooldown - 1);
+
+    recentTypes.push(chosen);
+    if (recentTypes.length > HISTORY_SIZE) recentTypes.shift();
+    piecesGenerated++;
+    return chosen;
+  }
+
+  function fillQueue() {
+    while (queue.length < 5) queue.push(takeRandomType());
+  }
   function createPiece(type) {
     const matrix = SHAPES[type][0];
     return {type, rotation:0, x:Math.floor((COLS-matrix[0].length)/2), y:type === "I" ? -1 : 0};
@@ -813,7 +1034,7 @@
   }
 
   function resetGame() {
-    board=createBoard(); bag=[]; queue=[]; current=null; holdType=null; canHold=true;
+    board=createBoard(); resetRandomizer(); current=null; holdType=null; canHold=true;
     score=0; lines=0; level=1; comboStreak=0; backToBack=0; lastClearWasTetris=false;
     running=true; paused=false; gameOver=false; resolvingClear=false; clearingRows=[];
     dropAccumulator=0; lockStart=null; lockResets=0; particles=[]; dropTrail=[];
@@ -1092,6 +1313,16 @@
     }
     updateStats(); markDirty();
   }
+
+  // iOS Safari/Chrome: block text selection, callout, drag and copy/paste menus during play.
+  const gameSurface = document.getElementById("app");
+  ["selectstart", "dragstart", "contextmenu"].forEach(type => {
+    gameSurface.addEventListener(type, event => event.preventDefault(), { passive: false });
+  });
+  gameSurface.addEventListener("copy", event => event.preventDefault());
+  gameSurface.addEventListener("cut", event => event.preventDefault());
+  gameSurface.addEventListener("paste", event => event.preventDefault());
+  document.addEventListener("gesturestart", event => event.preventDefault(), { passive: false });
 
   document.querySelectorAll(".action-btn").forEach(btn=>{
     const name=btn.dataset.action;

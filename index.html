@@ -557,9 +557,9 @@
               <p id="overlayText">기본 도형과 네온 특수 도형 총 18종.<br>레벨이 오르면 새로운 도형이 해금돼.</p>
               <div id="mixBadge" class="mix-badge">NEON MIX · 18 SHAPES · AUTO FEVER</div>
               <div id="guide" class="guide">
-                <div><b>좌우 스와이프</b><span>블록 여러 칸 이동</span></div>
+                <div><b>좌우 스와이프</b><span>방향 잠금 후 여러 칸 이동</span></div>
                 <div><b>가볍게 탭</b><span>블록 회전</span></div>
-                <div><b>아래 스와이프</b><span>천천히 내리기</span></div>
+                <div><b>아래 스와이프</b><span>좌우 흔들림을 무시하고 내리기</span></div>
                 <div><b>빠른 아래 플릭</b><span>즉시 낙하</span></div>
                 <div><b>위로 스와이프</b><span>블록 홀드</span></div>
                 <div><b>피버 게이지</b><span>100% 자동 발동 · 기본 25초</span></div>
@@ -1591,46 +1591,115 @@
   document.addEventListener("gesturestart", event => event.preventDefault(), { passive: false });
 
 
+  const SWIPE_LOCK_DISTANCE = 12;
+  const SWIPE_FALLBACK_DISTANCE = 30;
+
+  function chooseSwipeAxis(totalX,totalY) {
+    const ax=Math.abs(totalX), ay=Math.abs(totalY);
+    if (Math.max(ax,ay)<SWIPE_LOCK_DISTANCE) return null;
+
+    // 세로 조작에는 넉넉한 오차를 허용한다.
+    // 아래·위 스와이프 중 생기는 자연스러운 좌우 흔들림은 세로로 판정한다.
+    if (ay>=ax*.72) return "vertical";
+    if (ax>=ay*1.38) return "horizontal";
+
+    // 애매한 대각선은 바로 움직이지 않고 방향이 분명해질 때까지 기다린다.
+    if (Math.max(ax,ay)<SWIPE_FALLBACK_DISTANCE) return null;
+    return ay>=ax ? "vertical" : "horizontal";
+  }
+
   let touch=null;
   touchPad.addEventListener("pointerdown",e=>{
     if (!isPlayable())return;
-    e.preventDefault(); touchPad.setPointerCapture?.(e.pointerId); touchPad.classList.add("active");
-    touch={id:e.pointerId,startX:e.clientX,startY:e.clientY,lastX:e.clientX,lastY:e.clientY,startTime:performance.now(),moved:false};
+    e.preventDefault();
+    touchPad.setPointerCapture?.(e.pointerId);
+    touchPad.classList.add("active");
+    touch={
+      id:e.pointerId,
+      startX:e.clientX,
+      startY:e.clientY,
+      lastX:e.clientX,
+      lastY:e.clientY,
+      startTime:performance.now(),
+      moved:false,
+      axis:null
+    };
   },{passive:false});
+
   touchPad.addEventListener("pointermove",e=>{
     if (!touch || touch.id!==e.pointerId || !isPlayable())return;
     e.preventDefault();
-    const dx=e.clientX-touch.lastX, dy=e.clientY-touch.lastY;
+
+    const totalX=e.clientX-touch.startX;
+    const totalY=e.clientY-touch.startY;
+    if (Math.abs(totalX)>8 || Math.abs(totalY)>8) touch.moved=true;
+
+    if (!touch.axis) {
+      touch.axis=chooseSwipeAxis(totalX,totalY);
+      if (!touch.axis) return;
+
+      // 방향 잠금 전 움직임이 한꺼번에 적용되지 않도록 현재 좌표를 기준점으로 삼는다.
+      touch.lastX=e.clientX;
+      touch.lastY=e.clientY;
+      haptic(2);
+      return;
+    }
+
     const config=sensitivityConfig();
-    const xStep=config.xStep, yStep=config.yStep;
-    if (Math.abs(e.clientX-touch.startX)>8 || Math.abs(e.clientY-touch.startY)>8)touch.moved=true;
-    if (Math.abs(dx)>=xStep && Math.abs(dx)>Math.abs(dy)*.72) {
-      const steps=Math.min(config.maxX,Math.floor(Math.abs(dx)/xStep));
-      for(let i=0;i<steps;i++)move(dx>0?1:-1,0);
-      touch.lastX+=(dx>0?1:-1)*steps*xStep;
-      haptic(3);
+
+    if (touch.axis==="horizontal") {
+      const dx=e.clientX-touch.lastX;
+      if (Math.abs(dx)>=config.xStep) {
+        const steps=Math.min(config.maxX,Math.floor(Math.abs(dx)/config.xStep));
+        for(let i=0;i<steps;i++) move(dx>0?1:-1,0);
+        touch.lastX+=(dx>0?1:-1)*steps*config.xStep;
+        haptic(3);
+      }
+    } else {
+      const dy=e.clientY-touch.lastY;
+
+      // 세로로 잠긴 뒤에는 좌우 이동값을 완전히 무시한다.
+      if (dy>=config.yStep) {
+        const steps=Math.min(config.maxY,Math.floor(dy/config.yStep));
+        for(let i=0;i<steps;i++) move(0,1,true);
+        touch.lastY+=steps*config.yStep;
+      }
     }
-    if (dy>=yStep && Math.abs(dy)>Math.abs(dx)*.60) {
-      const steps=Math.min(config.maxY,Math.floor(dy/yStep));
-      for(let i=0;i<steps;i++)move(0,1,true);
-      touch.lastY+=steps*yStep;
-    }
-    updateStats(); markDirty();
+
+    updateStats();
+    markDirty();
   },{passive:false});
+
   function finishTouch(e) {
     if (!touch || touch.id!==e.pointerId)return;
     touchPad.classList.remove("active");
-    const t=touch; touch=null;
-    const dx=e.clientX-t.startX, dy=e.clientY-t.startY, duration=performance.now()-t.startTime;
+
+    const t=touch;
+    touch=null;
+
+    const dx=e.clientX-t.startX;
+    const dy=e.clientY-t.startY;
+    const duration=performance.now()-t.startTime;
     const ax=Math.abs(dx), ay=Math.abs(dy);
+
     if (!isPlayable())return;
-    if (ax<11 && ay<11 && duration<320) rotate(1);
-    else if (dy<-46 && ay>ax*.85) hold();
-    else if (dy>54 && duration<420 && ay>ax*.78) hardDrop();
-    updateStats(); markDirty();
+
+    if (!t.axis && ax<11 && ay<11 && duration<320) {
+      rotate(1);
+    } else if (t.axis==="vertical") {
+      if (dy<-46) hold();
+      else if (dy>54 && duration<420) hardDrop();
+    }
+
+    updateStats();
+    markDirty();
   }
+
   touchPad.addEventListener("pointerup",finishTouch,{passive:false});
-  touchPad.addEventListener("pointercancel",e=>{touchPad.classList.remove("active");if(touch&&touch.id===e.pointerId)touch=null;},{passive:false});
+  touchPad.addEventListener("pointercancel",e=>{
+    touchPad.classList.remove("active");
+    if(touch&&touch.id===e.pointerId) touch=null;
+  },{passive:false});
 
   const repeatable=new Set(["left","right","down"]);
   window.addEventListener("keydown",e=>{

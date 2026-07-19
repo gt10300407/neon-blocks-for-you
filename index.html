@@ -287,11 +287,12 @@
     .control-zone { display:none; min-height:0; }
     .touchpad {
       position:relative;
-      min-height:73px;
+      min-height:94px;
       overflow:hidden;
       border:1px solid rgba(101,239,255,.20);
-      border-radius:16px;
+      border-radius:18px;
       background:
+        radial-gradient(circle at 50% 50%, rgba(94,84,210,.10), transparent 42%),
         linear-gradient(90deg, transparent 49.5%, rgba(255,255,255,.055) 49.5%, rgba(255,255,255,.055) 50.5%, transparent 50.5%),
         linear-gradient(180deg, rgba(25,30,67,.78), rgba(9,11,29,.94));
       touch-action:none;
@@ -309,23 +310,125 @@
     }
     .touch-center {
       position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      color:rgba(215,221,244,.45); font-size:8px; letter-spacing:.12em; pointer-events:none;
+      width:78%;
+      color:rgba(215,221,244,.52);
+      text-align:center;
+      font-size:8px;
+      line-height:1.45;
+      letter-spacing:.10em;
+      pointer-events:none;
+      word-break:keep-all;
     }
     .touchpad.active { border-color:rgba(255,79,216,.50); background-color:rgba(66,26,80,.18); }
 
-    .mobile-actions { display:none; grid-template-columns:1fr 1fr 1.25fr 1fr; gap:5px; }
-    .action-btn {
-      min-height:46px; padding:3px;
-      border:1px solid rgba(111,237,255,.22); border-radius:13px;
-      color:white; background:linear-gradient(180deg,#1b2048,#0c0e28);
-      box-shadow:inset 0 -3px 0 rgba(0,0,0,.24);
-      font-size:12px; font-weight:950; touch-action:none;
+    .sensitivity-setting {
+      margin: 0 0 13px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      color:#aab2d1;
+      font-size:11px;
+      font-weight:850;
+      word-break:keep-all;
     }
-    .action-btn small { display:block; margin-top:2px; color:#8f98ba; font-size:7px; letter-spacing:.08em; }
-    .action-btn:active, .action-btn.active { transform:translateY(2px); border-color:rgba(255,79,216,.58); }
-    .overdrive-btn { border-color:rgba(255,231,106,.32); color:#fff4a4; }
-    .overdrive-btn.ready { color:#111; background:linear-gradient(180deg,#fff59a,#ffc342); border-color:white; box-shadow:0 0 15px rgba(255,219,66,.26), inset 0 -3px 0 rgba(101,58,0,.24); }
-    .overdrive-btn.active { color:white; background:linear-gradient(180deg,#ff54d7,#8738ff); border-color:#fff; }
+    .sensitivity-setting select {
+      min-width:105px;
+      padding:7px 28px 7px 10px;
+      border:1px solid rgba(101,239,255,.25);
+      border-radius:10px;
+      color:white;
+      background:#121630;
+      font:inherit;
+    }
+    .result-panel {
+      margin: 10px 0 15px;
+      display:grid;
+      gap:9px;
+      text-align:left;
+    }
+    .result-panel[hidden], .new-record[hidden] { display:none; }
+    .new-record {
+      padding:8px 10px;
+      border:1px solid rgba(255,231,106,.55);
+      border-radius:11px;
+      color:#fff4a4;
+      text-align:center;
+      background:rgba(255,231,106,.08);
+      font-size:15px;
+      font-weight:1000;
+      letter-spacing:.08em;
+    }
+    .result-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:6px;
+    }
+    .result-item {
+      min-width:0;
+      padding:8px 9px;
+      border:1px solid rgba(255,255,255,.065);
+      border-radius:10px;
+      background:rgba(255,255,255,.025);
+    }
+    .result-item span {
+      display:block;
+      color:#949dc1;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:.10em;
+    }
+    .result-item strong {
+      display:block;
+      margin-top:3px;
+      overflow:hidden;
+      color:white;
+      font-size:15px;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .record-gap {
+      min-height:18px;
+      color:#8df8ff;
+      text-align:center;
+      font-size:10px;
+      font-weight:850;
+      word-break:keep-all;
+    }
+    .record-title {
+      color:#aab3d3;
+      font-size:9px;
+      font-weight:950;
+      letter-spacing:.14em;
+    }
+    .record-list {
+      margin:0;
+      padding:0;
+      display:grid;
+      gap:4px;
+      list-style:none;
+      counter-reset:rank;
+    }
+    .record-list li {
+      counter-increment:rank;
+      padding:6px 8px;
+      display:grid;
+      grid-template-columns:28px 1fr auto;
+      align-items:center;
+      gap:6px;
+      border-radius:8px;
+      background:rgba(255,255,255,.025);
+      color:#b8c0df;
+      font-size:10px;
+    }
+    .record-list li::before {
+      content:counter(rank);
+      color:#8df8ff;
+      font-weight:1000;
+    }
+    .record-list strong { color:white; font-size:11px; }
+    .record-list small { color:#747ea3; font-size:8px; }
+
 
     .overdrive-meter {
       position:relative; height:7px; margin-top:3px; overflow:hidden;
@@ -347,8 +450,8 @@
       -webkit-user-drag: none;
     }
 
-    .brand, .hud, .panel, .overlay, .guide, .control-zone, .mobile-actions,
-    .touchpad, .action-btn, .primary, .icon-btn {
+    .brand, .hud, .panel, .overlay, .guide, .control-zone,
+    .touchpad, .primary, .icon-btn {
       -webkit-user-select: none;
       user-select: none;
       -webkit-touch-callout: none;
@@ -365,7 +468,6 @@
       }
       .corner-preview { display:block; }
       .control-zone { display:block; }
-      .mobile-actions { display:grid; }
       .desktop-help { display:none; }
       .overlay {
         position:fixed;
@@ -377,6 +479,9 @@
       }
       .overlay-card {
         width:min(100%,390px);
+        max-height:calc(100dvh - var(--safe-top) - var(--safe-bottom) - 36px);
+        overflow:auto;
+        overscroll-behavior:contain;
         padding:24px 18px 20px;
       }
       .overlay-card h2 { font-size:clamp(27px,8vw,34px); }
@@ -389,7 +494,6 @@
       .hud-item { padding:4px 2px; }
       .hud-value { font-size:12px; }
       .touchpad { min-height:68px; }
-      .action-btn { min-height:43px; font-size:11px; }
     }
 
     @media (max-width:900px) and (max-height:650px) and (orientation:landscape) {
@@ -402,7 +506,6 @@
       .corner-preview { display:block; }
       .control-zone { grid-column:2; grid-row:2; display:grid; grid-template-rows:1fr auto; gap:5px; min-height:0; }
       .touchpad { min-height:0; }
-      .mobile-actions { display:grid; }
       .desktop-help { display:none; }
     }
 
@@ -416,7 +519,7 @@
     <header class="topbar">
       <div>
         <h1 class="brand">유진공주 테트리스</h1>
-        <div class="subtitle">LOW HEAT · BIG COMBO · OVERDRIVE</div>
+        <div class="subtitle">LOW HEAT · BIG COMBO · AUTO FEVER</div>
       </div>
       <div class="top-actions">
         <button id="soundBtn" class="icon-btn" aria-label="소리 켜기 또는 끄기">♪</button>
@@ -427,9 +530,9 @@
 
     <section class="hud" aria-label="게임 정보">
       <div class="hud-item"><span class="hud-label">SCORE</span><span id="scoreM" class="hud-value">0</span></div>
+      <div class="hud-item"><span class="hud-label">BEST</span><span id="bestTop" class="hud-value">0</span></div>
       <div class="hud-item"><span class="hud-label">LINES</span><span id="linesM" class="hud-value">0</span></div>
       <div class="hud-item"><span class="hud-label">LEVEL</span><span id="levelM" class="hud-value">1</span></div>
-      <div class="hud-item"><span class="hud-label">COMBO</span><span id="comboM" class="hud-value">-</span></div>
     </section>
 
     <section class="game-shell">
@@ -451,13 +554,37 @@
           <div id="overlay" class="overlay">
             <div class="overlay-card">
               <h2 id="overlayTitle">유진공주 테트리스</h2>
-              <p id="overlayText">클래식 7종과 네온 특수 도형 5종.<br>순서는 매번 다르게 섞여.</p>
-              <div class="mix-badge">NEON MIX · 12 SHAPES</div>
+              <p id="overlayText">기본 도형과 네온 특수 도형 총 18종.<br>레벨이 오르면 새로운 도형이 해금돼.</p>
+              <div id="mixBadge" class="mix-badge">NEON MIX · 18 SHAPES · AUTO FEVER</div>
               <div id="guide" class="guide">
-                <div><b>좌우 드래그</b><span>블록 이동</span></div>
+                <div><b>좌우 스와이프</b><span>블록 여러 칸 이동</span></div>
                 <div><b>가볍게 탭</b><span>블록 회전</span></div>
-                <div><b>아래로 플릭</b><span>즉시 낙하</span></div>
+                <div><b>아래 스와이프</b><span>천천히 내리기</span></div>
+                <div><b>빠른 아래 플릭</b><span>즉시 낙하</span></div>
                 <div><b>위로 스와이프</b><span>블록 홀드</span></div>
+                <div><b>피버 게이지</b><span>100%에서 자동 발동</span></div>
+              </div>
+              <label id="sensitivitySetting" class="sensitivity-setting">
+                <span>스와이프 감도</span>
+                <select id="swipeSensitivity" aria-label="스와이프 감도">
+                  <option value="comfort">편안함</option>
+                  <option value="normal" selected>보통</option>
+                  <option value="fast">빠름</option>
+                </select>
+              </label>
+              <div id="resultPanel" class="result-panel" hidden>
+                <div id="newRecordBanner" class="new-record" hidden>NEW RECORD!</div>
+                <div class="result-grid">
+                  <div class="result-item"><span>이번 점수</span><strong id="finalScore">0</strong></div>
+                  <div class="result-item"><span>최고 점수</span><strong id="finalBest">0</strong></div>
+                  <div class="result-item"><span>삭제 라인</span><strong id="finalLines">0</strong></div>
+                  <div class="result-item"><span>도달 레벨</span><strong id="finalLevel">1</strong></div>
+                  <div class="result-item"><span>최대 콤보</span><strong id="finalCombo">0</strong></div>
+                  <div class="result-item"><span>도형 수</span><strong>18종</strong></div>
+                </div>
+                <div id="recordGap" class="record-gap"></div>
+                <div class="record-title">내 기록 TOP 5</div>
+                <ol id="recordList" class="record-list"></ol>
               </div>
               <button id="startBtn" class="primary">게임 시작</button>
             </div>
@@ -475,7 +602,7 @@
         <div class="stat"><div class="label">BEST</div><div id="bestM" class="value">0</div></div>
         <div class="stat"><div class="label">BACK TO BACK</div><div id="b2b" class="value">-</div></div>
         <div class="stat">
-          <div class="label">OVERDRIVE</div>
+          <div class="label">AUTO FEVER</div>
           <div class="overdrive-meter"><div id="overdriveFillD" class="overdrive-fill"></div></div>
           <div id="overdriveTextD" class="overdrive-text">0%</div>
         </div>
@@ -483,22 +610,16 @@
     </section>
 
     <section class="control-zone" aria-label="모바일 터치패드">
-      <div id="touchPad" class="touchpad">
+      <div id="touchPad" class="touchpad" aria-label="스와이프 조작 영역">
         <div class="touch-hint"><span>←</span><span>→</span></div>
-        <div class="touch-center">DRAG TO MOVE · TAP TO ROTATE</div>
+        <div class="touch-center">SWIPE TO MOVE<br>TAP ROTATE · ↑ HOLD · ↓ DROP</div>
       </div>
       <div class="overdrive-meter"><div id="overdriveFill" class="overdrive-fill"></div></div>
       <div id="overdriveText" class="overdrive-text">OVERDRIVE 0%</div>
     </section>
 
-    <section class="mobile-actions" aria-label="모바일 보조 버튼">
-      <button class="action-btn" data-action="hold">HOLD<small>보관</small></button>
-      <button class="action-btn" data-action="rotateCW">ROTATE<small>회전</small></button>
-      <button id="overdriveBtn" class="action-btn overdrive-btn" data-action="overdrive">DRIVE<small>충전 중</small></button>
-      <button class="action-btn" data-action="hardDrop">DROP<small>즉시 낙하</small></button>
-    </section>
 
-    <div class="desktop-help">키보드: ← → 이동 · ↓ 소프트 드롭 · Z/X 회전 · Space 하드 드롭 · C 홀드 · V 오버드라이브 · P 일시정지</div>
+    <div class="desktop-help">키보드: ← → 이동 · ↓ 소프트 드롭 · Z/X 회전 · Space 하드 드롭 · C 홀드 · P 일시정지 · 피버는 자동 발동</div>
   </main>
 
 <script>
@@ -521,17 +642,20 @@
   const COMBO_MULTIPLIER = [1, 1, 1.3, 1.6, 2, 2.5, 3];
 
   const CLASSIC_TYPES = Object.freeze(["I","J","L","O","S","T","Z"]);
-  const SPECIAL_TYPES = Object.freeze(["A","B","U","V","X"]);
+  const SPECIAL_TYPES = Object.freeze(["A","B","U","V","X","D","P","W","Y","N","F"]);
+  const LEVEL_1_SPECIALS = Object.freeze(["A","B","U","D"]);
+  const LEVEL_3_SPECIALS = Object.freeze(["V","X","P","W"]);
+  const LEVEL_6_SPECIALS = Object.freeze(["Y","N","F"]);
   const ALL_TYPES = Object.freeze([...CLASSIC_TYPES, ...SPECIAL_TYPES]);
   const HISTORY_SIZE = 4;
   const MAX_DROUGHT = 12;
-  const SPECIAL_CHANCE = 0.18;
   const SPECIAL_COOLDOWN_PIECES = 4;
 
   const COLORS = {
     I: "#42f5ff", J: "#5485ff", L: "#ff9b42", O: "#ffe14a",
     S: "#52ff82", T: "#c461ff", Z: "#ff4f7b",
-    A: "#00ffd0", B: "#8dff54", U: "#ff5cf4", V: "#ff6b35", X: "#f3ff52"
+    A: "#00ffd0", B: "#8dff54", U: "#ff5cf4", V: "#ff6b35", X: "#f3ff52",
+    D: "#7df9ff", P: "#ff7aac", W: "#7bffb2", Y: "#ffd166", N: "#6ea8ff", F: "#d78cff"
   };
 
   function rotateMatrixCW(matrix) {
@@ -596,7 +720,15 @@
     B: makeRotations([[1,0],[1,1]]),
     U: makeRotations([[1,0,1],[1,1,1]]),
     V: makeRotations([[1,0,0],[1,0,0],[1,1,1]]),
-    X: makeRotations([[0,1,0],[1,1,1],[0,1,0]])
+    X: makeRotations([[0,1,0],[1,1,1],[0,1,0]]),
+
+    // v3.6 추가 도형 6종
+    D: makeRotations([[1,1]]),
+    P: makeRotations([[1,1],[1,1],[1,0]]),
+    W: makeRotations([[1,0,0],[1,1,0],[0,1,1]]),
+    Y: makeRotations([[0,1],[1,1],[0,1],[0,1]]),
+    N: makeRotations([[1,1,0,0],[0,1,1,1]]),
+    F: makeRotations([[0,1,1],[1,1,0],[0,1,0]])
   };
 
   const JLSTZ_KICKS = {
@@ -626,15 +758,26 @@
   const soundBtn = document.getElementById("soundBtn");
   const pauseBtn = document.getElementById("pauseBtn");
   const restartBtn = document.getElementById("restartBtn");
-  const overdriveBtn = document.getElementById("overdriveBtn");
+  const mixBadge = document.getElementById("mixBadge");
+  const sensitivitySetting = document.getElementById("sensitivitySetting");
+  const swipeSensitivity = document.getElementById("swipeSensitivity");
+  const resultPanel = document.getElementById("resultPanel");
+  const newRecordBanner = document.getElementById("newRecordBanner");
+  const finalScoreEl = document.getElementById("finalScore");
+  const finalBestEl = document.getElementById("finalBest");
+  const finalLinesEl = document.getElementById("finalLines");
+  const finalLevelEl = document.getElementById("finalLevel");
+  const finalComboEl = document.getElementById("finalCombo");
+  const recordGapEl = document.getElementById("recordGap");
+  const recordListEl = document.getElementById("recordList");
   const holdCanvases = [document.getElementById("holdCanvas"), document.getElementById("holdCanvasM")];
   const nextCanvases = [0,1,2].map(i => document.getElementById("next" + i));
   const nextMobileCanvas = document.getElementById("nextM");
   const scoreEls = [document.getElementById("score"), document.getElementById("scoreM")];
-  const bestEls = [document.getElementById("best"), document.getElementById("bestM")];
+  const bestEls = [document.getElementById("best"), document.getElementById("bestM"), document.getElementById("bestTop")];
   const linesEls = [document.getElementById("lines"), document.getElementById("linesM")];
   const levelEls = [document.getElementById("level"), document.getElementById("levelM")];
-  const comboEls = [document.getElementById("combo"), document.getElementById("comboM")];
+  const comboEls = [document.getElementById("combo")].filter(Boolean);
   const b2bEl = document.getElementById("b2b");
   const overdriveFills = [document.getElementById("overdriveFill"), document.getElementById("overdriveFillD")];
   const overdriveTexts = [document.getElementById("overdriveText"), document.getElementById("overdriveTextD")];
@@ -660,6 +803,10 @@
   let backToBack = 0;
   let lastClearWasTetris = false;
   let best = Number(storage.get("neonBlocksBestV3", storage.get("neonBlocksBest", "0")));
+  let bestAtRunStart = best;
+  let maxCombo = 0;
+  let records = loadRecords();
+  let swipeMode = storage.get("neonBlocksSwipeSensitivity", "normal");
   let running = false;
   let paused = false;
   let gameOver = false;
@@ -686,6 +833,85 @@
   const backgroundCache = document.createElement("canvas");
   backgroundCache.width = 300;
   backgroundCache.height = 600;
+
+  function loadRecords() {
+    try {
+      const parsed = JSON.parse(storage.get("neonBlocksTop5V36", "[]"));
+      if (!Array.isArray(parsed)) return [];
+      return parsed
+        .filter(item => item && Number.isFinite(Number(item.score)))
+        .map(item => ({
+          score: Number(item.score) || 0,
+          lines: Number(item.lines) || 0,
+          level: Number(item.level) || 1,
+          combo: Number(item.combo) || 0,
+          date: String(item.date || "")
+        }))
+        .sort((a,b) => b.score - a.score)
+        .slice(0,5);
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function saveRunRecord() {
+    const date = new Date().toLocaleDateString("ko-KR", { month:"2-digit", day:"2-digit" });
+    records.push({ score, lines, level, combo:maxCombo, date });
+    records.sort((a,b) => b.score - a.score);
+    records = records.slice(0,5);
+    storage.set("neonBlocksTop5V36", JSON.stringify(records));
+  }
+
+  function renderRecordList() {
+    recordListEl.textContent = "";
+    if (!records.length) {
+      const empty = document.createElement("li");
+      const message = document.createElement("strong");
+      const detail = document.createElement("small");
+      message.textContent = "아직 기록이 없어";
+      detail.textContent = "-";
+      empty.append(message, detail);
+      recordListEl.appendChild(empty);
+      return;
+    }
+    records.forEach(record => {
+      const item = document.createElement("li");
+      const scoreText = document.createElement("strong");
+      const detail = document.createElement("small");
+      scoreText.textContent = record.score.toLocaleString();
+      detail.textContent = `${record.lines}L · LV${record.level} · ${record.combo}C · ${record.date}`;
+      item.append(scoreText, detail);
+      recordListEl.appendChild(item);
+    });
+  }
+
+  function showStartOverlay() {
+    overlayTitle.textContent = "유진공주 테트리스";
+    overlayText.innerHTML = "기본 도형과 네온 특수 도형 총 18종.<br>레벨이 오르면 새로운 도형이 해금돼.";
+    guide.style.display = "grid";
+    mixBadge.style.display = "inline-flex";
+    sensitivitySetting.style.display = "flex";
+    resultPanel.hidden = true;
+    startBtn.textContent = "게임 시작";
+  }
+
+  function sensitivityConfig() {
+    if (swipeMode === "comfort") return { xStep:15, yStep:15, maxX:6, maxY:7 };
+    if (swipeMode === "fast") return { xStep:25, yStep:22, maxX:4, maxY:5 };
+    return { xStep:19, yStep:18, maxX:5, maxY:6 };
+  }
+
+  function availableSpecialTypes() {
+    if (level <= 2) return [...LEVEL_1_SPECIALS];
+    if (level <= 5) return [...LEVEL_1_SPECIALS, ...LEVEL_3_SPECIALS];
+    return [...SPECIAL_TYPES];
+  }
+
+  function specialChanceForLevel() {
+    if (level <= 2) return 0.15;
+    if (level <= 5) return 0.20;
+    return 0.25;
+  }
 
   function createBoard() { return Array.from({length: ROWS}, () => Array(COLS).fill(null)); }
   function isOverdrive(now = performance.now()) { return overdriveUntil > now; }
@@ -793,14 +1019,15 @@
   }
 
   function takeSpecialType() {
-    let candidates = SPECIAL_TYPES.filter(type => !recentTypes.slice(-3).includes(type));
-    if (!candidates.length) candidates = [...SPECIAL_TYPES];
+    const available = availableSpecialTypes();
+    let candidates = available.filter(type => !recentTypes.slice(-3).includes(type));
+    if (!candidates.length) candidates = [...available];
     return randomChoice(candidates);
   }
 
   function takeRandomType() {
     const specialAllowed = piecesGenerated >= 7 && specialCooldown <= 0;
-    const useSpecial = specialAllowed && Math.random() < SPECIAL_CHANCE;
+    const useSpecial = specialAllowed && Math.random() < specialChanceForLevel();
     const chosen = useSpecial ? takeSpecialType() : takeClassicType();
 
     if (useSpecial) specialCooldown = SPECIAL_COOLDOWN_PIECES;
@@ -891,6 +1118,7 @@
     while (!collides(current.x,current.y+1,current.rotation)) { current.y++; distance++; }
     score += distance*2;
     overdriveCharge = Math.min(100, overdriveCharge + Math.min(8,distance*.35));
+    if (overdriveCharge >= 100) activateOverdrive();
     createDropTrail(startY,current.y);
     tone(135,.055,"square",.026);
     haptic(12);
@@ -934,7 +1162,7 @@
       if (comboStreak>0) {
         if (isOverdrive() && overdriveGrace>0) {
           overdriveGrace--;
-          showCallout("COMBO SAVED", `GRACE ${overdriveGrace}`, "OVERDRIVE");
+          showCallout("COMBO SAVED", `GRACE ${overdriveGrace}`, "FEVER");
         } else comboStreak=0;
       }
       updateStats();
@@ -962,6 +1190,7 @@
     for (let i=0;i<count;i++) board.unshift(Array(COLS).fill(null));
 
     comboStreak++;
+    maxCombo=Math.max(maxCombo,comboStreak);
     const comboIndex=Math.min(comboStreak,COMBO_MULTIPLIER.length-1);
     const comboMult=COMBO_MULTIPLIER[comboIndex];
     let b2bMult=1;
@@ -991,7 +1220,7 @@
     const extras=[];
     if (b2bMult>1) extras.push("BACK TO BACK");
     if (perfect) extras.push("PERFECT CLEAR");
-    if (isOverdrive()) extras.push("OVERDRIVE ×2");
+    if (isOverdrive()) extras.push("FEVER ×2");
     showCallout(names[count],comboText,`+${gained.toLocaleString()}${extras.length?" · "+extras.join(" · "):""}`);
     impact(count===4 || comboStreak>=4);
 
@@ -1002,6 +1231,7 @@
 
     resolvingClear=false;
     clearingRows=[];
+    if (overdriveCharge >= 100) activateOverdrive();
     updateStats();
     spawnPiece();
     markDirty();
@@ -1013,7 +1243,7 @@
     overdriveUntil=performance.now()+OVERDRIVE_DURATION;
     overdriveGrace=2;
     app.classList.add("overdrive-active");
-    showCallout("OVERDRIVE","SCORE ×2","8 SECONDS");
+    showCallout("AUTO FEVER","SCORE ×2","8 SECONDS");
     tone(420,.08,"sine",.025,0);
     tone(620,.10,"triangle",.025,.07);
     tone(920,.18,"sine",.022,.15);
@@ -1027,7 +1257,7 @@
     if (wasOverdriveActive && !active) {
       overdriveUntil=0;
       app.classList.remove("overdrive-active");
-      showCallout("DRIVE END","CHARGE AGAIN","");
+      showCallout("FEVER END","CHARGE AGAIN","");
       markDirty();
     }
     wasOverdriveActive=active;
@@ -1035,7 +1265,8 @@
 
   function resetGame() {
     board=createBoard(); resetRandomizer(); current=null; holdType=null; canHold=true;
-    score=0; lines=0; level=1; comboStreak=0; backToBack=0; lastClearWasTetris=false;
+    score=0; lines=0; level=1; comboStreak=0; maxCombo=0; backToBack=0; lastClearWasTetris=false;
+    bestAtRunStart=best;
     running=true; paused=false; gameOver=false; resolvingClear=false; clearingRows=[];
     dropAccumulator=0; lockStart=null; lockResets=0; particles=[]; dropTrail=[];
     overdriveCharge=0; overdriveUntil=0; overdriveGrace=0; wasOverdriveActive=false;
@@ -1049,11 +1280,31 @@
 
   function endGame() {
     gameOver=true; running=false;
+    const previousBest=bestAtRunStart;
+    const isNewRecord=score>previousBest;
     if (score>best) { best=score; storage.set("neonBlocksBestV3",String(best)); }
+    saveRunRecord();
     updateStats();
-    overlayTitle.textContent="GAME OVER";
-    overlayText.innerHTML=`점수 <strong>${score.toLocaleString()}</strong><br>다시 한 판 시작해봐.`;
+
+    overlayTitle.textContent=isNewRecord?"NEW RECORD!":"GAME OVER";
+    overlayText.textContent=isNewRecord?"유진공주의 새로운 최고기록이야.":"이번 기록과 최고기록을 확인해봐.";
     guide.style.display="none";
+    mixBadge.style.display="none";
+    sensitivitySetting.style.display="none";
+    resultPanel.hidden=false;
+    newRecordBanner.hidden=!isNewRecord;
+    finalScoreEl.textContent=score.toLocaleString();
+    finalBestEl.textContent=best.toLocaleString();
+    finalLinesEl.textContent=String(lines);
+    finalLevelEl.textContent=String(level);
+    finalComboEl.textContent=String(maxCombo);
+    recordGapEl.textContent=isNewRecord
+      ? `이전 최고기록 ${previousBest.toLocaleString()}점 돌파`
+      : (previousBest>score
+          ? `최고기록까지 ${(previousBest-score).toLocaleString()}점`
+          : "최고기록과 같은 점수야");
+    renderRecordList();
+
     startBtn.textContent="다시 시작";
     overlay.hidden=false;
     playGameOverSound();
@@ -1068,6 +1319,9 @@
       overlayTitle.textContent="PAUSED";
       overlayText.textContent="잠깐 쉬는 중이야.";
       guide.style.display="none";
+      mixBadge.style.display="none";
+      sensitivitySetting.style.display="none";
+      resultPanel.hidden=true;
       startBtn.textContent="계속하기";
       overlay.hidden=false;
       pauseBtn.textContent="▶";
@@ -1242,11 +1496,8 @@
     const remaining=active?Math.max(0,overdriveUntil-now):0;
     const pct=active?(remaining/OVERDRIVE_DURATION)*100:overdriveCharge;
     overdriveFills.forEach(el=>el.style.width=`${Math.max(0,Math.min(100,pct))}%`);
-    const text=active?`OVERDRIVE ${(remaining/1000).toFixed(1)}s`:`OVERDRIVE ${Math.floor(overdriveCharge)}%`;
+    const text=active?`FEVER ${(remaining/1000).toFixed(1)}s`:`AUTO FEVER ${Math.floor(overdriveCharge)}%`;
     overdriveTexts.forEach(el=>el.textContent=text);
-    overdriveBtn.classList.toggle("ready",!active&&overdriveCharge>=100);
-    overdriveBtn.classList.toggle("active",active);
-    overdriveBtn.innerHTML=active?`ACTIVE<small>${(remaining/1000).toFixed(1)}s</small>`:(overdriveCharge>=100?`DRIVE<small>READY</small>`:`DRIVE<small>${Math.floor(overdriveCharge)}%</small>`);
   }
 
   function impact(strong=false) {
@@ -1299,7 +1550,6 @@
   function haptic(pattern) { if (navigator.vibrate) navigator.vibrate(pattern); }
 
   function action(name) {
-    if (name==="overdrive") { activateOverdrive(); return; }
     if (name!=="pause" && !isPlayable())return;
     switch(name) {
       case "left":move(-1,0);break;
@@ -1324,12 +1574,6 @@
   gameSurface.addEventListener("paste", event => event.preventDefault());
   document.addEventListener("gesturestart", event => event.preventDefault(), { passive: false });
 
-  document.querySelectorAll(".action-btn").forEach(btn=>{
-    const name=btn.dataset.action;
-    const stop=()=>btn.classList.remove("active");
-    btn.addEventListener("pointerdown",e=>{e.preventDefault();btn.classList.add("active");action(name);});
-    btn.addEventListener("pointerup",stop);btn.addEventListener("pointercancel",stop);btn.addEventListener("pointerleave",stop);
-  });
 
   let touch=null;
   touchPad.addEventListener("pointerdown",e=>{
@@ -1341,16 +1585,17 @@
     if (!touch || touch.id!==e.pointerId || !isPlayable())return;
     e.preventDefault();
     const dx=e.clientX-touch.lastX, dy=e.clientY-touch.lastY;
-    const xStep=20, yStep=18;
+    const config=sensitivityConfig();
+    const xStep=config.xStep, yStep=config.yStep;
     if (Math.abs(e.clientX-touch.startX)>8 || Math.abs(e.clientY-touch.startY)>8)touch.moved=true;
     if (Math.abs(dx)>=xStep && Math.abs(dx)>Math.abs(dy)*.72) {
-      const steps=Math.min(5,Math.floor(Math.abs(dx)/xStep));
+      const steps=Math.min(config.maxX,Math.floor(Math.abs(dx)/xStep));
       for(let i=0;i<steps;i++)move(dx>0?1:-1,0);
       touch.lastX+=(dx>0?1:-1)*steps*xStep;
       haptic(3);
     }
     if (dy>=yStep && Math.abs(dy)>Math.abs(dx)*.60) {
-      const steps=Math.min(6,Math.floor(dy/yStep));
+      const steps=Math.min(config.maxY,Math.floor(dy/yStep));
       for(let i=0;i<steps;i++)move(0,1,true);
       touch.lastY+=steps*yStep;
     }
@@ -1373,13 +1618,21 @@
 
   const repeatable=new Set(["left","right","down"]);
   window.addEventListener("keydown",e=>{
-    const map={ArrowLeft:"left",ArrowRight:"right",ArrowDown:"down",z:"rotateCCW",Z:"rotateCCW",x:"rotateCW",X:"rotateCW",ArrowUp:"rotateCW"," ":"hardDrop",c:"hold",C:"hold",v:"overdrive",V:"overdrive",p:"pause",P:"pause"};
+    const map={ArrowLeft:"left",ArrowRight:"right",ArrowDown:"down",z:"rotateCCW",Z:"rotateCCW",x:"rotateCW",X:"rotateCW",ArrowUp:"rotateCW"," ":"hardDrop",c:"hold",C:"hold",p:"pause",P:"pause"};
     if (e.key==="r"||e.key==="R") { e.preventDefault();resetGame();return; }
     const mapped=map[e.key];
     if (mapped) { e.preventDefault();if(e.repeat&&!repeatable.has(mapped))return;action(mapped); }
   },{passive:false});
 
-  startBtn.addEventListener("click",()=>{if(paused&&!gameOver)togglePause();else{guide.style.display="grid";startBtn.textContent="게임 시작";resetGame();}});
+  startBtn.addEventListener("click",()=>{
+    if(paused&&!gameOver) togglePause();
+    else resetGame();
+  });
+  swipeSensitivity.value=swipeMode;
+  swipeSensitivity.addEventListener("change",()=>{
+    swipeMode=swipeSensitivity.value;
+    storage.set("neonBlocksSwipeSensitivity",swipeMode);
+  });
   pauseBtn.addEventListener("click",togglePause);
   restartBtn.addEventListener("click",resetGame);
   soundBtn.addEventListener("click",()=>{soundOn=!soundOn;soundBtn.textContent=soundOn?"♪":"×";storage.set("neonBlocksSound",soundOn?"on":"off");if(soundOn)tone(520,.07,"sine",.022);});
@@ -1388,6 +1641,9 @@
 
   buildCaches();
   soundBtn.textContent=soundOn?"♪":"×";
+  swipeSensitivity.value=swipeMode;
+  showStartOverlay();
+  renderRecordList();
   fillQueue();
   drawPreviews();
   updateStats();

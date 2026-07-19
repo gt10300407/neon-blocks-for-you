@@ -319,49 +319,56 @@
       position:absolute;
       inset:0;
       pointer-events:none;
+      -webkit-user-select:none !important;
+      user-select:none !important;
+      -webkit-touch-callout:none !important;
     }
     .touch-hint::before,
     .touch-hint::after {
-      content:"";
       position:absolute;
       top:50%;
-      width:17px;
-      height:17px;
-      border:solid rgba(192,201,231,.43);
-      transform:translateY(-50%) rotate(45deg);
+      transform:translateY(-50%);
+      color:rgba(192,201,231,.44);
+      font-size:20px;
+      font-weight:900;
+      line-height:1;
+      pointer-events:none;
+      -webkit-user-select:none !important;
+      user-select:none !important;
+      -webkit-touch-callout:none !important;
     }
     .touch-hint::before {
-      left:16%;
-      border-width:0 0 4px 4px;
+      content:"←";
+      left:15%;
     }
     .touch-hint::after {
-      right:16%;
-      border-width:4px 4px 0 0;
+      content:"→";
+      right:15%;
     }
-    .touch-center-mark {
+    .touch-center-label {
       position:absolute;
       left:50%;
       top:50%;
-      width:62px;
-      height:22px;
+      width:78%;
       transform:translate(-50%,-50%);
-      border:1px solid rgba(215,221,244,.16);
-      border-radius:999px;
+      color:rgba(215,221,244,.52);
+      text-align:center;
+      font-size:8px;
+      line-height:1.45;
+      letter-spacing:.10em;
+      white-space:pre-line;
       pointer-events:none;
+      -webkit-user-select:none !important;
+      user-select:none !important;
+      -webkit-touch-callout:none !important;
     }
-    .touch-center-mark::before {
-      content:"";
-      position:absolute;
-      left:50%;
-      top:50%;
-      width:7px;
-      height:7px;
-      transform:translate(-50%,-50%);
-      border-radius:50%;
-      background:rgba(215,221,244,.35);
-      box-shadow:
-        -17px 0 0 rgba(76,245,255,.20),
-        17px 0 0 rgba(255,79,216,.20);
+    .touch-center-label::before {
+      content:"SWIPE TO MOVE\A TAP ROTATE · ↑ HOLD · ↓ DROP";
+      white-space:pre-line;
+      pointer-events:none;
+      -webkit-user-select:none !important;
+      user-select:none !important;
+      -webkit-touch-callout:none !important;
     }
     .touchpad.active {
       border-color:rgba(255,79,216,.50);
@@ -663,7 +670,7 @@
         aria-label="스와이프 조작 영역. 좌우 이동, 탭 회전, 위 홀드, 아래 드롭"
       >
         <div class="touch-hint" aria-hidden="true"></div>
-        <div class="touch-center-mark" aria-hidden="true"></div>
+        <div class="touch-center-label" aria-hidden="true"></div>
       </div>
       <div class="overdrive-meter"><div id="overdriveFill" class="overdrive-fill"></div></div>
       <div id="overdriveText" class="overdrive-text">OVERDRIVE 0%</div>
@@ -1643,6 +1650,12 @@
   document.addEventListener("selectionchange", () => {
     const selection=window.getSelection?.();
     if (selection && !selection.isCollapsed) selection.removeAllRanges();
+  });
+
+  // iOS Safari의 길게 누르기 텍스트 확대경/콜아웃 방지.
+  // 조작 판정은 Pointer Event가 담당하고, 기본 Touch 동작만 차단한다.
+  ["touchstart","touchmove","touchend"].forEach(type => {
+    touchPad.addEventListener(type, event => event.preventDefault(), { passive:false });
   });
 
 

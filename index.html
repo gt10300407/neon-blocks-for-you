@@ -318,34 +318,25 @@
     .touch-hint {
       position:absolute;
       inset:0;
-      pointer-events:none;
-      -webkit-user-select:none !important;
-      user-select:none !important;
-      -webkit-touch-callout:none !important;
-    }
-    .touch-hint::before,
-    .touch-hint::after {
-      position:absolute;
-      top:50%;
-      transform:translateY(-50%);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 15%;
       color:rgba(192,201,231,.44);
       font-size:20px;
       font-weight:900;
-      line-height:1;
       pointer-events:none;
       -webkit-user-select:none !important;
       user-select:none !important;
       -webkit-touch-callout:none !important;
     }
-    .touch-hint::before {
-      content:"←";
-      left:15%;
+    .touch-hint span {
+      pointer-events:none;
+      -webkit-user-select:none !important;
+      user-select:none !important;
+      -webkit-touch-callout:none !important;
     }
-    .touch-hint::after {
-      content:"→";
-      right:15%;
-    }
-    .touch-center-label {
+    .touch-center {
       position:absolute;
       left:50%;
       top:50%;
@@ -356,16 +347,8 @@
       font-size:8px;
       line-height:1.45;
       letter-spacing:.10em;
-      white-space:pre-line;
       pointer-events:none;
-      -webkit-user-select:none !important;
-      user-select:none !important;
-      -webkit-touch-callout:none !important;
-    }
-    .touch-center-label::before {
-      content:"SWIPE TO MOVE\A TAP ROTATE · ↑ HOLD · ↓ DROP";
-      white-space:pre-line;
-      pointer-events:none;
+      word-break:keep-all;
       -webkit-user-select:none !important;
       user-select:none !important;
       -webkit-touch-callout:none !important;
@@ -664,13 +647,9 @@
     </section>
 
     <section class="control-zone" aria-label="모바일 터치패드">
-      <div
-        id="touchPad"
-        class="touchpad"
-        aria-label="스와이프 조작 영역. 좌우 이동, 탭 회전, 위 홀드, 아래 드롭"
-      >
-        <div class="touch-hint" aria-hidden="true"></div>
-        <div class="touch-center-label" aria-hidden="true"></div>
+      <div id="touchPad" class="touchpad" aria-label="스와이프 조작 영역">
+        <div class="touch-hint" aria-hidden="true"><span>←</span><span>→</span></div>
+        <div class="touch-center" aria-hidden="true">SWIPE TO MOVE<br>TAP ROTATE · ↑ HOLD · ↓ DROP</div>
       </div>
       <div class="overdrive-meter"><div id="overdriveFill" class="overdrive-fill"></div></div>
       <div id="overdriveText" class="overdrive-text">OVERDRIVE 0%</div>

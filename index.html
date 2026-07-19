@@ -27,6 +27,15 @@
       -webkit-tap-highlight-color: transparent;
       -webkit-touch-callout: none;
     }
+    #app,
+    #app *,
+    #app *::before,
+    #app *::after {
+      -webkit-user-select: none !important;
+      user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-user-drag: none !important;
+    }
     html, body {
       width: 100%;
       min-height: 100%;
@@ -296,30 +305,68 @@
         linear-gradient(90deg, transparent 49.5%, rgba(255,255,255,.055) 49.5%, rgba(255,255,255,.055) 50.5%, transparent 50.5%),
         linear-gradient(180deg, rgba(25,30,67,.78), rgba(9,11,29,.94));
       touch-action:none;
-      -webkit-user-select:none;
-      user-select:none;
-      -webkit-touch-callout:none;
+      cursor:default;
+      -webkit-user-select:none !important;
+      user-select:none !important;
+      -webkit-touch-callout:none !important;
+      -webkit-user-drag:none;
     }
     .touchpad::before {
       content:""; position:absolute; left:12%; right:12%; top:50%; height:1px;
       background:linear-gradient(90deg,transparent,rgba(76,245,255,.24),transparent);
     }
     .touch-hint {
-      position:absolute; inset:0; display:flex; align-items:center; justify-content:space-between;
-      padding:0 15%; color:rgba(192,201,231,.44); font-size:20px; font-weight:900; pointer-events:none;
-    }
-    .touch-center {
-      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:78%;
-      color:rgba(215,221,244,.52);
-      text-align:center;
-      font-size:8px;
-      line-height:1.45;
-      letter-spacing:.10em;
+      position:absolute;
+      inset:0;
       pointer-events:none;
-      word-break:keep-all;
     }
-    .touchpad.active { border-color:rgba(255,79,216,.50); background-color:rgba(66,26,80,.18); }
+    .touch-hint::before,
+    .touch-hint::after {
+      content:"";
+      position:absolute;
+      top:50%;
+      width:17px;
+      height:17px;
+      border:solid rgba(192,201,231,.43);
+      transform:translateY(-50%) rotate(45deg);
+    }
+    .touch-hint::before {
+      left:16%;
+      border-width:0 0 4px 4px;
+    }
+    .touch-hint::after {
+      right:16%;
+      border-width:4px 4px 0 0;
+    }
+    .touch-center-mark {
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:62px;
+      height:22px;
+      transform:translate(-50%,-50%);
+      border:1px solid rgba(215,221,244,.16);
+      border-radius:999px;
+      pointer-events:none;
+    }
+    .touch-center-mark::before {
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:7px;
+      height:7px;
+      transform:translate(-50%,-50%);
+      border-radius:50%;
+      background:rgba(215,221,244,.35);
+      box-shadow:
+        -17px 0 0 rgba(76,245,255,.20),
+        17px 0 0 rgba(255,79,216,.20);
+    }
+    .touchpad.active {
+      border-color:rgba(255,79,216,.50);
+      background-color:rgba(66,26,80,.18);
+    }
 
     .sensitivity-setting {
       margin: 0 0 13px;
@@ -610,9 +657,13 @@
     </section>
 
     <section class="control-zone" aria-label="모바일 터치패드">
-      <div id="touchPad" class="touchpad" aria-label="스와이프 조작 영역">
-        <div class="touch-hint"><span>←</span><span>→</span></div>
-        <div class="touch-center">SWIPE TO MOVE<br>TAP ROTATE · ↑ HOLD · ↓ DROP</div>
+      <div
+        id="touchPad"
+        class="touchpad"
+        aria-label="스와이프 조작 영역. 좌우 이동, 탭 회전, 위 홀드, 아래 드롭"
+      >
+        <div class="touch-hint" aria-hidden="true"></div>
+        <div class="touch-center-mark" aria-hidden="true"></div>
       </div>
       <div class="overdrive-meter"><div id="overdriveFill" class="overdrive-fill"></div></div>
       <div id="overdriveText" class="overdrive-text">OVERDRIVE 0%</div>
@@ -1589,6 +1640,10 @@
   gameSurface.addEventListener("cut", event => event.preventDefault());
   gameSurface.addEventListener("paste", event => event.preventDefault());
   document.addEventListener("gesturestart", event => event.preventDefault(), { passive: false });
+  document.addEventListener("selectionchange", () => {
+    const selection=window.getSelection?.();
+    if (selection && !selection.isCollapsed) selection.removeAllRanges();
+  });
 
 
   const SWIPE_LOCK_DISTANCE = 12;

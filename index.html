@@ -562,7 +562,7 @@
                 <div><b>아래 스와이프</b><span>천천히 내리기</span></div>
                 <div><b>빠른 아래 플릭</b><span>즉시 낙하</span></div>
                 <div><b>위로 스와이프</b><span>블록 홀드</span></div>
-                <div><b>피버 게이지</b><span>100%에서 자동 발동</span></div>
+                <div><b>피버 게이지</b><span>100% 자동 발동 · 기본 25초</span></div>
               </div>
               <label id="sensitivitySetting" class="sensitivity-setting">
                 <span>스와이프 감도</span>
@@ -635,7 +635,9 @@
   const MAX_LOCK_RESETS = 15;
   const BASE_FRAME_MS = 1000 / 30;
   const EFFECT_FRAME_MS = 1000 / 60;
-  const OVERDRIVE_DURATION = 8000;
+  const OVERDRIVE_DURATION = 25000;
+  const OVERDRIVE_MAX_DURATION = 40000;
+  const OVERDRIVE_LINE_BONUS = 3000;
   const GRAVITY = [900,780,680,590,510,440,380,325,280,240,205,175,150,125,105,90,76,64,54,45];
   const CLEAR_SCORE = [0, 1000, 3000, 6000, 12000];
   const HIT_STOP = [0, 45, 65, 85, 115];
@@ -828,6 +830,7 @@
   let overdriveGrace = 0;
   let wasOverdriveActive = false;
   let lastOverdriveHudTime = 0;
+  let pauseStartedAt = 0;
 
   const tileCache = {};
   const backgroundCache = document.createElement("canvas");
@@ -1220,7 +1223,13 @@
     const extras=[];
     if (b2bMult>1) extras.push("BACK TO BACK");
     if (perfect) extras.push("PERFECT CLEAR");
-    if (isOverdrive()) extras.push("FEVER ×2");
+    if (isOverdrive()) {
+      const now=performance.now();
+      const remaining=Math.max(0,overdriveUntil-now);
+      const extension=count*OVERDRIVE_LINE_BONUS;
+      overdriveUntil=now+Math.min(OVERDRIVE_MAX_DURATION,remaining+extension);
+      extras.push(`FEVER ×2 · +${count*3}s`);
+    }
     showCallout(names[count],comboText,`+${gained.toLocaleString()}${extras.length?" · "+extras.join(" · "):""}`);
     impact(count===4 || comboStreak>=4);
 
@@ -1243,7 +1252,7 @@
     overdriveUntil=performance.now()+OVERDRIVE_DURATION;
     overdriveGrace=2;
     app.classList.add("overdrive-active");
-    showCallout("AUTO FEVER","SCORE ×2","8 SECONDS");
+    showCallout("AUTO FEVER","SCORE ×2","25 SECONDS");
     tone(420,.08,"sine",.025,0);
     tone(620,.10,"triangle",.025,.07);
     tone(920,.18,"sine",.022,.15);
@@ -1270,6 +1279,7 @@
     running=true; paused=false; gameOver=false; resolvingClear=false; clearingRows=[];
     dropAccumulator=0; lockStart=null; lockResets=0; particles=[]; dropTrail=[];
     overdriveCharge=0; overdriveUntil=0; overdriveGrace=0; wasOverdriveActive=false;
+    pauseStartedAt=0;
     app.classList.remove("overdrive-active");
     overlay.hidden=true; pauseBtn.textContent="Ⅱ";
     lastLogicTime=performance.now();
@@ -1316,6 +1326,7 @@
     if (gameOver || !current || resolvingClear) return;
     paused=!paused;
     if (paused) {
+      pauseStartedAt=performance.now();
       overlayTitle.textContent="PAUSED";
       overlayText.textContent="잠깐 쉬는 중이야.";
       guide.style.display="none";
@@ -1326,9 +1337,14 @@
       overlay.hidden=false;
       pauseBtn.textContent="▶";
     } else {
+      const resumedAt=performance.now();
+      if (pauseStartedAt>0 && overdriveUntil>pauseStartedAt) {
+        overdriveUntil += resumedAt-pauseStartedAt;
+      }
+      pauseStartedAt=0;
       overlay.hidden=true;
       pauseBtn.textContent="Ⅱ";
-      lastLogicTime=performance.now();
+      lastLogicTime=resumedAt;
       dropAccumulator=0;
     }
     markDirty();
@@ -1341,7 +1357,7 @@
     animationId=requestAnimationFrame(loop);
     const delta=Math.min(now-lastLogicTime,100);
     lastLogicTime=now;
-    updateOverdrive(now);
+    if (!paused) updateOverdrive(now);
 
     if (isPlayable()) {
       dropAccumulator+=delta;
@@ -1355,7 +1371,7 @@
       } else lockStart=null;
     }
 
-    if (isOverdrive(now) && now-lastOverdriveHudTime>=100) { updateOverdriveHud(now); lastOverdriveHudTime=now; }
+    if (!paused && isOverdrive(now) && now-lastOverdriveHudTime>=100) { updateOverdriveHud(now); lastOverdriveHudTime=now; }
     const effectsActive=particles.length>0 || dropTrail.length>0 || resolvingClear;
     const frameMs=effectsActive ? EFFECT_FRAME_MS : BASE_FRAME_MS;
     if (dirty || now-lastRenderTime>=frameMs) {
